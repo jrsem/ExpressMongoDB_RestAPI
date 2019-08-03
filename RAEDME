@@ -1,0 +1,95 @@
+/*we’re going to build an API backend for our movie tickets booking app 
+that will store movie data in a MongoDB database 
+and will return it to the app as JSON data.
+https://rationalappdev.com/api-backend-with-nodejs-express-and-mongodb-for-react-native-apps/
+*/
+
+SETUP A MONGODB database IN YOUR SYSTEM
+-------------------------------------
+
+install MongoDB in your system:
+> sudo apt-get remove mongodb-org
+> sudo apt-get install mongodb
+
+Create the service config file as shown below:
+
+> cd /lib/systemd/system
+> sudo touch mongodb.service
+> sudo nano mongodb.service
+[Unit]
+Description=An object/document-oriented database
+Documentation=man:mongod(1)
+After=network.target
+
+[Service]
+User=mongodb
+Group=mongodb
+ExecStart=/usr/bin/mongod --quiet --config /etc/mongodb.conf
+
+[Install]
+WantedBy=multi-user.target
+
+Verify in the list if the service is enabled or disabled using the command below:
+
+> systemctl list-unit-files --type=service
+...
+mongodb.service             disabled
+...
+
+
+If it is disabled or not in the list, enable it:
+
+> sudo systemctl enable mongodb.service
+
+
+Check again:
+
+> systemctl list-unit-files --type=service 
+...
+mongodb.service             enabled
+...
+
+Now you can managing the service on SystemD init process:
+
+> systemctl status mongodb
+> sudo systemctl stop mongodb
+> sudo systemctl start mongodb
+> sudo systemctl restart mongodb
+
+Enjoy!
+
+Agora já temos o MongoDB instalado num computador qualquer(servidor), neste casa a gente instalou ele na mesma maquina qua a gente está desenvolvido.
+
+verify the mongodb version: 
+"mongod --version"
+
+After installation, MongoDB will start automatically. To start or stop MongoDB use init script. Below are the example commands to do.
+
+
+Now, let’s create a folder that MongoDB will use to store our database data:
+in your project folder execute this commnad:
+$sudo mkdir -p /data/db
+
+
+And set the correct permissions:
+$sudo chmod 777 /data/db
+
+
+===================
+1) Verify if the database is running ou active:
+$ systemctl status mongodb
+
+
+if not Run the database in your system:
+$sudo service mongodb start
+
+2)To save the data in the "populate.js" file into the table in the database,
+enter into the project folder and execute this command:
+
+$node_modules/babel-cli/bin/babel-node.js populate.js
+
+Enter this url in the browser:
+
+http://127.0.0.1:3000/v1/movies.json
+
+Bingo!!!!
